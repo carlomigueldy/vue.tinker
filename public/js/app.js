@@ -1704,9 +1704,73 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted, coming from the Articles component.');
+    this.initMap();
+    this.leafletDraw();
+  },
+  methods: {
+    printIt: function printIt(request) {
+      console.log(request);
+    },
+    leafletDraw: function leafletDraw() {
+      var drawnItems = new L.FeatureGroup();
+      this.map.addLayer(drawnItems);
+      var drawControl = new L.Control.Draw({
+        draw: {
+          circle: false,
+          circlemarker: false
+        },
+        edit: {
+          featureGroup: drawnItems,
+          edit: false
+        }
+      });
+      this.map.addControl(drawControl);
+      this.map.on('draw:created', function (e) {
+        var type = e.layerType;
+        var layer = e.layer;
+
+        var _this = this;
+
+        drawnItems.addLayer(layer);
+
+        if (type == 'polygon' || type == 'rectangle') {
+          var points = layer.toGeoJSON();
+          var coords = JSON.stringify(points.geometry.coordinates[0]);
+          /*
+              Check if it works, and yes it did! 
+          */
+
+          console.log(coords);
+        }
+
+        if (type == 'marker') {
+          var lat = layer.getLatLng().lat;
+          var lng = layer.getLatLng().lng;
+          /*
+              Check if it works, and yes it did! 
+          */
+
+          console.log("Latitude: " + lat + " | Longitude: " + lng);
+        }
+      });
+    },
+    initMap: function initMap() {
+      this.map = L.map('map').setView([-41.2858, 174.78682], 14);
+      this.tileLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
+      });
+      this.tileLayer.addTo(this.map);
+    }
   }
 });
 
@@ -6169,7 +6233,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#map { \n    height: 300px;\n}\n", ""]);
+exports.push([module.i, "\n#map { \n    height: 400px;\n}\n", ""]);
 
 // exports
 
@@ -37659,7 +37723,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [
-      _c("h2", [_vm._v("Articles")]),
+      _c("h2", [_vm._v("EthnoGIS with Leaflet Draw Feature")]),
       _vm._v(" "),
       _c("div", { attrs: { id: "map" } })
     ])
@@ -49826,56 +49890,9 @@ var app = new Vue({
   components: {
     Articles: _components_Articles__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  mounted: function mounted() {
-    this.initMap();
-    this.leafletDraw();
-  },
   methods: {
-    leafletDraw: function leafletDraw() {
-      var drawnItems = new L.FeatureGroup();
-      this.map.addLayer(drawnItems);
-      var drawControl = new L.Control.Draw({
-        draw: {
-          circle: false,
-          circlemarker: false
-        },
-        edit: {
-          featureGroup: drawnItems,
-          edit: false
-        }
-      });
-      this.map.addControl(drawControl);
-      this.map.on('draw:created', function (e) {
-        var type = e.layerType;
-        var layer = e.layer; // console.log("Check value for drawnItems => ");
-        // console.log(drawnItems);
-        // console.log(layer);
-        // console.log(type);
-        // console.log("Check value for layer => ");
-        // console.log(this.layer);
-
-        drawnItems.addLayer(layer);
-
-        if (type == 'polygon' || type == 'rectangle') {
-          var coordinates = JSON.stringify(layer.getLatLngs().map(function (point) {
-            console.log("".concat(point[i].lat, ", ").concat(point[i].lat));
-            return [point.lat, point.lng];
-          }));
-        } // if (this.type == 'marker') {
-        //     this.lat = layer.getLatLng().lat;
-        //     this.lng = layer.getLatLng().lng;
-        //     console.log("Latitude: " + this.lat + " | Longitude: " + this.lng);
-        // }
-
-      });
-    },
-    initMap: function initMap() {
-      this.map = L.map('map').setView([-41.2858, 174.78682], 14);
-      this.tileLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
-      });
-      this.tileLayer.addTo(this.map);
+    printPol: function printPol(request) {
+      console.log(request);
     }
   }
 });
