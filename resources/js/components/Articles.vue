@@ -1,30 +1,35 @@
 <template>
     <div>
-        <h2>EthnoGIS with Leaflet Draw Feature</h2>
+        <h2>{{ title }}</h2>
         <div id="map"></div>
     </div>
 </template>
 
 <style>
-#map { 
+body {
+    margin: 0;
+}
+html, body, #map { 
     height: 400px;
 }
 </style>
 
 <script>
 export default {
+    data() {
+        return {
+            title: 'EthnoGIS Leaflet Draw Plugin',
+        }
+    },
+
     mounted() {
         console.log('Component mounted, coming from the Articles component.')
         this.initMap();
-        this.leafletDraw();
+        this.initDraw();
     },
 
     methods: {
-        printIt: function(request) {
-            console.log(request);
-        },
-
-        leafletDraw: function() {
+        initDraw: function() {
             const drawnItems = new L.FeatureGroup();
             this.map.addLayer(drawnItems);
 
@@ -43,6 +48,7 @@ export default {
             this.map.on('draw:created', function (e) {
                 const type = e.layerType;
                 const layer = e.layer;
+                const vm = this;
 
                 drawnItems.addLayer(layer);
 
@@ -54,6 +60,18 @@ export default {
                     |  Check if it works, and yes it did!    |
                     /---------------------------------------*/
                     console.log(coords);
+
+                    // Not working yet ...
+                    fetch('api/article', {
+                        method: 'POST',
+                        body: coords,
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("Polygon stored");
+                            console.log(coords);
+                        })
+                        .catch(err => console.log(err))
                 }
 
                 if (type == 'marker') {
@@ -69,7 +87,7 @@ export default {
         },
 
         initMap: function() {
-            this.map = L.map('map').setView([-41.2858, 174.78682], 14);
+            this.map = L.map('map').setView([8.021155456563914, 124.00543212890626], 8);
 
             this.tileLayer = L.tileLayer(
             'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',

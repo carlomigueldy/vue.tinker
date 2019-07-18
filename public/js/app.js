@@ -1710,17 +1710,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      title: 'EthnoGIS Leaflet Draw Plugin'
+    };
+  },
   mounted: function mounted() {
     console.log('Component mounted, coming from the Articles component.');
     this.initMap();
-    this.leafletDraw();
+    this.initDraw();
   },
   methods: {
-    printIt: function printIt(request) {
-      console.log(request);
-    },
-    leafletDraw: function leafletDraw() {
+    initDraw: function initDraw() {
       var drawnItems = new L.FeatureGroup();
       this.map.addLayer(drawnItems);
       var drawControl = new L.Control.Draw({
@@ -1737,6 +1742,7 @@ __webpack_require__.r(__webpack_exports__);
       this.map.on('draw:created', function (e) {
         var type = e.layerType;
         var layer = e.layer;
+        var vm = this;
         drawnItems.addLayer(layer);
 
         if (type == 'polygon' || type == 'rectangle') {
@@ -1746,7 +1752,19 @@ __webpack_require__.r(__webpack_exports__);
           |  Check if it works, and yes it did!    |
           /---------------------------------------*/
 
-          console.log(coords);
+          console.log(coords); // Not working yet ...
+
+          fetch('api/article', {
+            method: 'POST',
+            body: coords
+          }).then(function (response) {
+            return response.json();
+          }).then(function (data) {
+            console.log("Polygon stored");
+            console.log(coords);
+          })["catch"](function (err) {
+            return console.log(err);
+          });
         }
 
         if (type == 'marker') {
@@ -1761,7 +1779,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     initMap: function initMap() {
-      this.map = L.map('map').setView([-41.2858, 174.78682], 14);
+      this.map = L.map('map').setView([8.021155456563914, 124.00543212890626], 8);
       this.tileLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png', {
         maxZoom: 18,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
@@ -6230,7 +6248,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#map { \n    height: 400px;\n}\n", ""]);
+exports.push([module.i, "\nbody {\n    margin: 0;\n}\nhtml, body, #map { \n    height: 400px;\n}\n", ""]);
 
 // exports
 
@@ -37712,20 +37730,13 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _c("h2", [_vm._v(_vm._s(_vm.title))]),
+    _vm._v(" "),
+    _c("div", { attrs: { id: "map" } })
+  ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("h2", [_vm._v("EthnoGIS with Leaflet Draw Feature")]),
-      _vm._v(" "),
-      _c("div", { attrs: { id: "map" } })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
