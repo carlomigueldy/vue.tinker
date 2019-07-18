@@ -19,6 +19,7 @@ export default {
     data() {
         return {
             title: 'EthnoGIS Leaflet Draw Plugin',
+            test: 'test',
         }
     },
 
@@ -45,6 +46,9 @@ export default {
             });
             this.map.addControl(drawControl);
 
+            // from data property
+            console.log(this.test);
+
             this.map.on('draw:created', function (e) {
                 const type = e.layerType;
                 const layer = e.layer;
@@ -55,6 +59,8 @@ export default {
                 if(type == 'polygon' || type == 'rectangle') {
                     var points = layer.toGeoJSON();
                     var coords = JSON.stringify(points.geometry.coordinates[0]);
+                    var ya = points.geometry.coordinates[0];
+                    console.log(ya);
 
                     /*---------------------------------------/
                     |  Check if it works, and yes it did!    |
@@ -64,11 +70,14 @@ export default {
                     // Not working yet ...
                     fetch('api/article', {
                         method: 'POST',
-                        body: coords,
+                        body: ya,
+                        headers: {
+                            'content-type': 'application/json'
+                        }
                     })
                         .then(response => response.json())
                         .then(data => {
-                            console.log("Polygon stored");
+                            console.log("Polygon stored, but not really...");
                             // console.log(coords);
                         })
                         .catch(err => console.log(err))

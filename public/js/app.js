@@ -1716,7 +1716,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      title: 'EthnoGIS Leaflet Draw Plugin'
+      title: 'EthnoGIS Leaflet Draw Plugin',
+      test: 'test'
     };
   },
   mounted: function mounted() {
@@ -1738,7 +1739,9 @@ __webpack_require__.r(__webpack_exports__);
           edit: false
         }
       });
-      this.map.addControl(drawControl);
+      this.map.addControl(drawControl); // from data property
+
+      console.log(this.test);
       this.map.on('draw:created', function (e) {
         var type = e.layerType;
         var layer = e.layer;
@@ -1748,6 +1751,8 @@ __webpack_require__.r(__webpack_exports__);
         if (type == 'polygon' || type == 'rectangle') {
           var points = layer.toGeoJSON();
           var coords = JSON.stringify(points.geometry.coordinates[0]);
+          var ya = points.geometry.coordinates[0];
+          console.log(ya);
           /*---------------------------------------/
           |  Check if it works, and yes it did!    |
           /---------------------------------------*/
@@ -1756,11 +1761,14 @@ __webpack_require__.r(__webpack_exports__);
 
           fetch('api/article', {
             method: 'POST',
-            body: coords
+            body: ya,
+            headers: {
+              'content-type': 'application/json'
+            }
           }).then(function (response) {
             return response.json();
           }).then(function (data) {
-            console.log("Polygon stored"); // console.log(coords);
+            console.log("Polygon stored, but not really..."); // console.log(coords);
           })["catch"](function (err) {
             return console.log(err);
           });
