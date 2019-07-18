@@ -34,13 +34,15 @@ class ArticlesController extends Controller
         // $article = $request->isMethod('put') ? Article::findOrFail($request->article_id) : new Article;
 
         // $article->id = $request->input('article_id');
-        // $article->title = $request->input('title');
-        // $article->body = $request->input('body');
+        $article->title = $request->input('title');
+        $article->body = $request->input('body');
+        $article->coordinates = $request->input('coordinates');
 
-        // if($article->save())
-        // {
-        //     return new ArticleResource($article);
-        // }
+        if($article->save())
+        {
+            // return new ArticleResource($article);
+            return ArticleResource::collection(Article::all());
+        }
     }
 
     /**

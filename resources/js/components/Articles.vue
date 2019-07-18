@@ -69,7 +69,7 @@ export default {
                         .then(response => response.json())
                         .then(data => {
                             console.log("Polygon stored");
-                            console.log(coords);
+                            // console.log(coords);
                         })
                         .catch(err => console.log(err))
                 }

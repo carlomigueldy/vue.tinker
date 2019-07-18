@@ -1760,8 +1760,7 @@ __webpack_require__.r(__webpack_exports__);
           }).then(function (response) {
             return response.json();
           }).then(function (data) {
-            console.log("Polygon stored");
-            console.log(coords);
+            console.log("Polygon stored"); // console.log(coords);
           })["catch"](function (err) {
             return console.log(err);
           });
