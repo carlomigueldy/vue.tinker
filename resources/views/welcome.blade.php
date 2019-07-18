@@ -16,7 +16,7 @@
     </head>
     <body>
         <div id="app">
-            <div class="container m-5">
+            <div class="container p-3">
                 <Articles></Articles>
             </div>
         </div>

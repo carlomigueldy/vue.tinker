@@ -20,11 +20,11 @@ export default {
     },
 
     methods: {
-        printIt(request) {
+        printIt: function(request) {
             console.log(request);
         },
 
-        leafletDraw() {
+        leafletDraw: function() {
             const drawnItems = new L.FeatureGroup();
             this.map.addLayer(drawnItems);
 
@@ -43,7 +43,6 @@ export default {
             this.map.on('draw:created', function (e) {
                 const type = e.layerType;
                 const layer = e.layer;
-                let _this = this;
 
                 drawnItems.addLayer(layer);
 
@@ -51,9 +50,9 @@ export default {
                     var points = layer.toGeoJSON();
                     var coords = JSON.stringify(points.geometry.coordinates[0]);
 
-                    /*
-                        Check if it works, and yes it did! 
-                    */
+                    /*---------------------------------------/
+                    |  Check if it works, and yes it did!    |
+                    /---------------------------------------*/
                     console.log(coords);
                 }
 
@@ -61,15 +60,15 @@ export default {
                     var lat = layer.getLatLng().lat;
                     var lng = layer.getLatLng().lng;
 
-                    /*
-                        Check if it works, and yes it did! 
-                    */
+                    /*---------------------------------------/
+                    |  Check if it works, and yes it did!    |
+                    /---------------------------------------*/
                     console.log("Latitude: " + lat + " | Longitude: " + lng);
                 }
             });
         },
 
-        initMap() {
+        initMap: function() {
             this.map = L.map('map').setView([-41.2858, 174.78682], 14);
 
             this.tileLayer = L.tileLayer(

@@ -1737,17 +1737,14 @@ __webpack_require__.r(__webpack_exports__);
       this.map.on('draw:created', function (e) {
         var type = e.layerType;
         var layer = e.layer;
-
-        var _this = this;
-
         drawnItems.addLayer(layer);
 
         if (type == 'polygon' || type == 'rectangle') {
           var points = layer.toGeoJSON();
           var coords = JSON.stringify(points.geometry.coordinates[0]);
-          /*
-              Check if it works, and yes it did! 
-          */
+          /*---------------------------------------/
+          |  Check if it works, and yes it did!    |
+          /---------------------------------------*/
 
           console.log(coords);
         }
@@ -1755,9 +1752,9 @@ __webpack_require__.r(__webpack_exports__);
         if (type == 'marker') {
           var lat = layer.getLatLng().lat;
           var lng = layer.getLatLng().lng;
-          /*
-              Check if it works, and yes it did! 
-          */
+          /*---------------------------------------/
+          |  Check if it works, and yes it did!    |
+          /---------------------------------------*/
 
           console.log("Latitude: " + lat + " | Longitude: " + lng);
         }
@@ -50062,8 +50059,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/carlomigueldy/myprojects/larticles_api/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/carlomigueldy/myprojects/larticles_api/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/carlomigueldy/myprojects/vue.tinker/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/carlomigueldy/myprojects/vue.tinker/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
