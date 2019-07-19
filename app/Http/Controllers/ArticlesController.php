@@ -41,8 +41,8 @@ class ArticlesController extends Controller
 
         if($article->save())
         {
-            // return new ArticleResource($article);
-            return ArticleResource::collection(Article::all());
+            // return ArticleResource::collection(Article::all());
+            return redirect('/');
         }
     }
 

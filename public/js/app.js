@@ -1750,37 +1750,21 @@ __webpack_require__.r(__webpack_exports__);
 
         if (type == 'polygon' || type == 'rectangle') {
           var points = layer.toGeoJSON();
-          var coords = JSON.stringify(points.geometry.coordinates[0]);
-          var ya = points.geometry.coordinates[0];
-          console.log(ya);
-          /*---------------------------------------/
-          |  Check if it works, and yes it did!    |
-          /---------------------------------------*/
+          var coordinates = JSON.stringify(points.geometry.coordinates[0]);
+          /*
+              Make a form inside the popup content that we 
+              can actually store those coordinates inside the Database
+          */
 
-          console.log(coords); // Not working yet ...
-
-          fetch('api/article', {
-            method: 'POST',
-            body: ya,
-            headers: {
-              'content-type': 'application/json'
-            }
-          }).then(function (response) {
-            return response.json();
-          }).then(function (data) {
-            console.log("Polygon stored, but not really..."); // console.log(coords);
-          })["catch"](function (err) {
-            return console.log(err);
-          });
+          var popupContent = 'Do you want to add this polygon? <br>';
+          popupContent += "<form method='post' action='api/article'>" + "<br>Title: <input type='text' name='title'>" + "<br>Body: <input type='text' name='body'>" + "<textarea name='coordinates'>" + coordinates + "</textarea>" + "<br><input type='Submit' value='Add'>" + "</form>";
         }
+
+        drawnItems.bindPopup(popupContent).openPopup();
 
         if (type == 'marker') {
           var lat = layer.getLatLng().lat;
           var lng = layer.getLatLng().lng;
-          /*---------------------------------------/
-          |  Check if it works, and yes it did!    |
-          /---------------------------------------*/
-
           console.log("Latitude: " + lat + " | Longitude: " + lng);
         }
       });
