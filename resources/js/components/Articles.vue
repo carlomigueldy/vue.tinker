@@ -38,6 +38,8 @@ export default {
                 draw: {
                     circle: false,
                     circlemarker: false,
+                    rectangle: false,
+                    polyline: false,
                 },
                 edit: {
                     featureGroup: drawnItems,
@@ -52,7 +54,6 @@ export default {
             this.map.on('draw:created', function (e) {
                 const type = e.layerType;
                 const layer = e.layer;
-                const vm = this;
 
                 drawnItems.addLayer(layer);
 
@@ -64,21 +65,38 @@ export default {
                         Make a form inside the popup content that we 
                         can actually store those coordinates inside the Database
                     */
-                    var popupContent = 'Do you want to add this polygon? <br>';
-                    popupContent += "<form method='post' action='api/article'>" + 
-                    "<br>Title: <input type='text' name='title'>" +
-                    "<br>Body: <input type='text' name='body'>" +
-                    "<textarea name='coordinates'>" + coordinates + "</textarea>" + 
-                    "<br><input type='Submit' value='Add'>" 
-                    + "</form>";
+                    var polygonPopup = 'Do you want to add this polygon? <br>';
+                    polygonPopup += `
+                        <form method='post' action='api/article'>
+                            <br>Title: <input type='text' name='title'>
+                            <br>Body: <input type='text' name='body'>
+                            <textarea name='coordinates'>${coordinates}</textarea>
+                            <br><input type='Submit' value='Add'>
+                        </form>`;
+
+                    drawnItems.bindPopup(polygonPopup).openPopup();
                 }
-                drawnItems.bindPopup(popupContent).openPopup();
 
                 if (type == 'marker') {
                     var lat = layer.getLatLng().lat;
                     var lng = layer.getLatLng().lng;
+
+                    /*
+                        Make a form inside the popup content that we 
+                        can actually store those lat & lng inside the Database
+                    */
+                    var markerPopup = 'Do you want to add this marker? <br>';
+                    markerPopup += `
+                        <form method='post' action='api/article'>
+                            <br>Title: <input type='text' name='title'>
+                            <br>Body: <input type='text' name='body'>
+                            <br>Latitude: <input type='text' name='lat' value='${lat}'
+                            <br>Longitude: <input type='text' name='lng' value='${lng}'>
+                            <br><input type='Submit' value='Add'>
+                        </form>
+                    `;
                     
-                    console.log("Latitude: " + lat + " | Longitude: " + lng);
+                    drawnItems.bindPopup(markerPopup).openPopup();
                 }
             });
         },

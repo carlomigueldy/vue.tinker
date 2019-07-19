@@ -1732,7 +1732,9 @@ __webpack_require__.r(__webpack_exports__);
       var drawControl = new L.Control.Draw({
         draw: {
           circle: false,
-          circlemarker: false
+          circlemarker: false,
+          rectangle: false,
+          polyline: false
         },
         edit: {
           featureGroup: drawnItems,
@@ -1745,7 +1747,6 @@ __webpack_require__.r(__webpack_exports__);
       this.map.on('draw:created', function (e) {
         var type = e.layerType;
         var layer = e.layer;
-        var vm = this;
         drawnItems.addLayer(layer);
 
         if (type == 'polygon' || type == 'rectangle') {
@@ -1756,16 +1757,22 @@ __webpack_require__.r(__webpack_exports__);
               can actually store those coordinates inside the Database
           */
 
-          var popupContent = 'Do you want to add this polygon? <br>';
-          popupContent += "<form method='post' action='api/article'>" + "<br>Title: <input type='text' name='title'>" + "<br>Body: <input type='text' name='body'>" + "<textarea name='coordinates'>" + coordinates + "</textarea>" + "<br><input type='Submit' value='Add'>" + "</form>";
+          var polygonPopup = 'Do you want to add this polygon? <br>';
+          polygonPopup += "\n                        <form method='post' action='api/article'>\n                            <br>Title: <input type='text' name='title'>\n                            <br>Body: <input type='text' name='body'>\n                            <textarea name='coordinates'>".concat(coordinates, "</textarea>\n                            <br><input type='Submit' value='Add'>\n                        </form>");
+          drawnItems.bindPopup(polygonPopup).openPopup();
         }
-
-        drawnItems.bindPopup(popupContent).openPopup();
 
         if (type == 'marker') {
           var lat = layer.getLatLng().lat;
           var lng = layer.getLatLng().lng;
-          console.log("Latitude: " + lat + " | Longitude: " + lng);
+          /*
+              Make a form inside the popup content that we 
+              can actually store those lat & lng inside the Database
+          */
+
+          var markerPopup = 'Do you want to add this marker? <br>';
+          markerPopup += "\n                        <form method='post' action='api/article'>\n                            <br>Title: <input type='text' name='title'>\n                            <br>Body: <input type='text' name='body'>\n                            <br>Latitude: <input type='text' name='lat' value='".concat(lat, "'\n                            <br>Longitude: <input type='text' name='lng' value='").concat(lng, "'>\n                            <br><input type='Submit' value='Add'>\n                        </form>\n                    ");
+          drawnItems.bindPopup(markerPopup).openPopup();
         }
       });
     },
